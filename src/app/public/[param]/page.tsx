@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import supabase from "../../../utils/supabase";
-import ProductDetails from "../details/page";
+import ProductDetails from "../../../components/ProductDetails"; // Atualizado!
 import ProductList from "../list/page";
 
 type Product = {
