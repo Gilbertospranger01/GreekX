@@ -18,7 +18,7 @@ const Create_Products = () => {
     const [preview, setPreview] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const handleChange = (e: any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setProduct({ ...product, [e.target.name]: e.target.value });
     };
 
@@ -30,7 +30,7 @@ const Create_Products = () => {
         }
     };
 
-    const handleSubmit = async (e: any) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
 
@@ -75,7 +75,7 @@ const Create_Products = () => {
 
     return (
         <div className="min-h-screen bg-gray-900 text-white flex">
-           
+
             <div className="flex flex-col items-center justify-center w-full p-8 ml-64">
                 <h1 className="text-3xl font-bold mb-6">Create Product</h1>
                 <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md">
