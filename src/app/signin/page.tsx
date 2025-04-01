@@ -9,6 +9,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaGithub } from "react-icons/fa";
 import BackgroundImage from "../../components/backgroundimage";
 
+
 function Signin() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -39,13 +40,16 @@ function Signin() {
         .getPublicUrl(fileName);
 
       return publicUrlData.publicUrl;
-    } catch (error) {
-      console.error("Erro ao fazer upload da imagem:", error);
-      return null;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Erro ao fazer upload da imagem:", error.message);
+      } else {
+        console.error("Erro desconhecido ao fazer upload da imagem.");
+      }
     }
-  }
+  };
 
-  async function handleUserSignIn(user: any) {
+  async function handleUserSignIn(user: { id: string; raw_user_meta_data?: { picture?: string; image_url?: string; avatar_url?: string } }) {
     const { id, raw_user_meta_data } = user;
     const imageUrl =
       raw_user_meta_data?.picture ||
@@ -63,21 +67,23 @@ function Signin() {
 
   const handleOAuthLogin = async (provider: "google" | "facebook" | "github"): Promise<void> => {
     try {
+      console.log(`Tentando autenticação com ${provider}...`);
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${window.location.origin}/home`, 
+          redirectTo: `${window.location.origin}/home`,
         },
       });
 
       if (error) throw error;
+      console.log(`${provider} login bem-sucedido!`);
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error("Erro ao fazer login:", error.message);
         alert("Erro ao fazer login: " + error.message);
       } else {
-        console.error("Erro ao fazer login: An unknown error occurred.");
-        alert("Erro ao fazer login: An unknown error occurred.");
+        console.error("Erro desconhecido ao fazer login.");
+        alert("Erro desconhecido ao fazer login.");
       }
     }
   };
@@ -177,8 +183,8 @@ function Signin() {
         </motion.div>
       </div>
       <div className="w-1/2 h-full flex flex-col justify-center items-center text-white bg-cover bg-center overflow-hidden">
-          <BackgroundImage />
-        </div>
+        <BackgroundImage />
+      </div>
     </div>
   );
 }

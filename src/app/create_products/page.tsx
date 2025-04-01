@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "../../utils/supabase";
+import Image from "next/image";
 
 const Create_Products = () => {
     const router = useRouter();
@@ -137,7 +138,7 @@ const Create_Products = () => {
                         <label className="block text-gray-400 mb-1">Image</label>
                         <div className="relative w-[200px] h-[200px] border-2 border-gray-600 rounded-md flex items-center justify-center bg-gray-700 cursor-pointer">
                             {preview ? (
-                                <img
+                                <Image
                                     src={preview}
                                     alt="Preview"
                                     className="w-full h-full object-cover rounded-md"

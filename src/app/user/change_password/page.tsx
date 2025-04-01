@@ -82,7 +82,7 @@ const ChangePassword = () => {
 
             await supabase.auth.signOut();
             router.push("/signin");
-        } catch (err) {
+        } catch {
             setError("Ocorreu um erro inesperado.");
         }
     };

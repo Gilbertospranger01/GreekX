@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 
 interface PhoneInputProps {
   onChange: (value: string) => void; 
@@ -37,7 +38,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
     <div className={`relative mb-6 ${className}`}>
       <div className="flex items-center border border-gray-700 rounded-md bg-gray-900 px-3 py-2">
 
-        <img
+        <Image
           src={selectedCountry.flag}
           alt={selectedCountry.name}
           className="w-6 h-4 object-cover rounded-sm mr-2"

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import supabase from "../utils/supabase";
+import Image from "next/image";
 
 
 interface BackgroundImageProps {
@@ -54,7 +55,7 @@ const BackgroundImage: React.FC<BackgroundImageProps> = ({ className }) => {
   if (imageUrls.length === 0) return null;
 
   return (
-    <img
+    <Image
       key={imageUrls[currentImageIndex]}
       src={imageUrls[currentImageIndex]}
       alt="Background"

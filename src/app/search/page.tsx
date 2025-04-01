@@ -4,9 +4,15 @@ import { useState } from "react";
 import InputSearch from "../../components/input-search";
 import supabase from "../../utils/supabase";
 
+type Product = {
+  name: string;
+  description: string;
+  price: number;
+};
+
 const Home: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {

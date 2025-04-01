@@ -12,6 +12,11 @@ import Sidebar from "./sidebar";
 import InputSearch from "./input-search";
 import { motion } from "framer-motion";
 
+type User = {
+  id: string;
+  name: string;
+};
+
 const Header = () => {
   const { session } = useAuth();
   const router = useRouter();
@@ -21,7 +26,7 @@ const Header = () => {
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
   const [username, setUsername] = useState<string>("Usuário");
   const [searchTerm, setSearchTerm] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState<number>(0);
 

@@ -15,7 +15,7 @@ const Home = () => {
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
   const [username, setUsername] = useState<string>("Usuário");
   const [searchTerm] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {

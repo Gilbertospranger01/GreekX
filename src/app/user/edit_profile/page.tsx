@@ -121,7 +121,7 @@ const Edit_Profile = () => {
         setImageUploading(true);
 
         const fileName = `${userData.username}-${Date.now()}.${file.name.split('.').pop()}`;
-        const { data, error } = await supabase.storage
+        const { error } = await supabase.storage
             .from('greekxs')
             .upload(`picture/${fileName}`, file, { upsert: true });
 
