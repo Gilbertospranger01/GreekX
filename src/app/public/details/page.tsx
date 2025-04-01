@@ -3,7 +3,6 @@
 import Header from "../../../components/header";
 import Image from "next/image";
 
-// Definição do tipo Product
 type Product = {
   id: string;
   image: string;
@@ -12,8 +11,11 @@ type Product = {
   price: number;
 };
 
-// Componente ProductDetails sem a tipagem explícita na assinatura da função
-const ProductDetails = ({ product }: { product: Product }) => {
+type ProductDetailsProps = {
+  product: Product;
+};
+
+export function ProductDetails({ product }: ProductDetailsProps) {
   return (
     <div className="bg-gray-900 mt-18 h-dvh">
       <Header />
@@ -36,21 +38,4 @@ const ProductDetails = ({ product }: { product: Product }) => {
       </div>
     </div>
   );
-};
-
-// Use getServerSideProps para buscar os dados do produto
-export const getServerSideProps = async (context: any) => {
-  const { productId } = context.params; // Supondo que o ID do produto esteja na URL
-
-  // Faça a requisição para pegar os detalhes do produto
-  const res = await fetch(`https://api.example.com/products/${productId}`);
-  const product: Product = await res.json();
-
-  return {
-    props: {
-      product, // Passa os dados do produto como props
-    },
-  };
-};
-
-export default ProductDetails;
+}
