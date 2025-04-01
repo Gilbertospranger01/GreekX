@@ -11,7 +11,11 @@ type Product = {
   price: number;
 };
 
-export default function ProductDetails({ product }: { product: Product }) {
+type ProductDetailsProps = {
+  product: Product;
+};
+
+export default function ProductDetails({ product }: ProductDetailsProps) {
   return (
     <div className="bg-gray-900 mt-18 h-dvh">
       <Header />
