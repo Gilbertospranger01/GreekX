@@ -15,7 +15,7 @@ type ProductDetailsProps = {
   product: Product;
 };
 
-export function ProductDetails({ product }: ProductDetailsProps) {
+export default function ProductDetails({ product }: ProductDetailsProps) {
   return (
     <div className="bg-gray-900 mt-18 h-dvh">
       <Header />
