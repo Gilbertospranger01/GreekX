@@ -25,7 +25,7 @@ export default function ProductHandler() {
 
     async function fetchProducts() {
       setLoading(true);
-      let query = supabase.from("products").select("id, image, name, description, price");
+      const query = supabase.from("products").select("id, image, name, description, price");
 
       if (isValidUUID(param)) {
         const { data, error } = await query.eq("id", param).single();

@@ -41,10 +41,11 @@ const Home = () => {
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       handleSearch();
-    }, 0.5); // Delay de 300ms para evitar chamadas excessivas
+    }, 500); 
+  
     return () => clearTimeout(delayDebounce);
-  }, [searchTerm]);
-
+  }, [searchTerm, handleSearch]); 
+  
   useEffect(() => {
     if (session === null) return; // Se ainda está carregando, não faz nada
     if (!session) router.push("/signin");

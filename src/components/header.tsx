@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "../hooks/useAuth";
@@ -47,7 +47,7 @@ const Header = () => {
     fetchData();
   }, []);
 
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
     if (!searchTerm.trim()) return;
     setLoading(true);
 
@@ -63,49 +63,49 @@ const Header = () => {
     }
 
     setLoading(false);
-  };
+  }, [searchTerm, setResults, setLoading]);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       handleSearch();
-    }, 0.5);
+    }, 500); // Ajustei o tempo para 500ms
     return () => clearTimeout(delayDebounce);
-  }, [searchTerm]);
+  }, [searchTerm, handleSearch]);
+  
 
   useEffect(() => {
     const fetchProducts = async () => {
       const { data, error } = await supabase.from("products").select("*");
-      console.log(products)
-
+  
       if (error) {
         console.error("Erro ao buscar produtos:", error.message);
         return;
       }
-
+  
       console.log("Produtos carregados:", data); 
       setProducts(data);
     };
-
+  
     fetchProducts();
-  }, []);
+  }, []);  
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (!session?.user?.id) return;
 
       const { data, error } = await supabase
-        .from("profiles") 
-        .select("username, picture_url") 
-        .eq("id", session.user.id) 
-        .single(); 
+        .from("profiles")
+        .select("username, picture_url")
+        .eq("id", session.user.id)
+        .single();
 
       if (error) {
         console.error("Erro ao buscar perfil:", error.message);
         return;
       }
 
-      setProfilePicture(data?.picture_url || null); 
-      setUsername(data?.username || "Usuário"); 
+      setProfilePicture(data?.picture_url || null);
+      setUsername(data?.username || "Usuário");
     };
 
     fetchUserProfile();
@@ -178,14 +178,14 @@ const Header = () => {
           </nav>
 
           <div className="md:flex items-center">
-              <motion.p
-                className="font-semibold text-green-500 mr-6"
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 5 }}
-              >
-                {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(balance)}
-              </motion.p>
+            <motion.p
+              className="font-semibold text-green-500 mr-6"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 5 }}
+            >
+              {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(balance)}
+            </motion.p>
             <p className="hidden md:block mr-6">
               <span className="text-blue-600 ml-4 mr-8">{username || "No Username"}</span>
             </p>
@@ -204,7 +204,7 @@ const Header = () => {
                     />
                   </div>
                 ) : (
-                  <div className="w-14 h-14 bg-gray-700 rounded-full"></div> 
+                  <div className="w-14 h-14 bg-gray-700 rounded-full"></div>
                 )}
               </button>
             </div>
