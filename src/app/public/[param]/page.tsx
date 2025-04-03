@@ -11,8 +11,17 @@ interface ProductDetailsProps {
   };
 }
 
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+}
+
+
 const ProductDetails = ({ params }: ProductDetailsProps) => {
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
