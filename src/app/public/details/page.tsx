@@ -1,4 +1,4 @@
-"use client";
+"use client";  // Indica que este componente deve ser tratado como de cliente
 
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -17,12 +17,13 @@ interface Product {
 const ProductDetails = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [product, setProduct] = useState<Product>(); 
+  const [product, setProduct] = useState<Product>();
 
+  // Garantir que o hook useRouter só seja chamado no cliente
   useEffect(() => {
-    const fetchProduct = async () => {
-      if (!id) return;
+    if (!id) return;
 
+    const fetchProduct = async () => {
       const { data, error } = await supabase
         .from('products')
         .select('*')
@@ -48,7 +49,7 @@ const ProductDetails = () => {
       <div className="grid md:grid-cols-2 gap-8">
         <div className="flex justify-center items-center">
           <img
-            src={product.image}
+            src={product.image || "/default-image.jpg"} // Adicione uma imagem padrão caso não exista
             alt={product.name}
             className="w-full h-auto rounded-lg shadow-lg"
           />
