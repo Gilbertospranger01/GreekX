@@ -3,6 +3,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import supabase from '@/utils/supabase';
+import Image from 'next/image';
 
 interface Product {
   id: string;
@@ -67,9 +68,11 @@ const ProductDetails = () => {
     <div className="max-w-4xl mx-auto p-6">
       <div className="grid md:grid-cols-2 gap-8">
         <div className="flex justify-center items-center">
-          <img
-            src={product.image || "/default-image.jpg"} // Adicione uma imagem padrão caso não exista
+          <Image
+            src={product.image || "/placeholder.jpg"}
             alt={product.name}
+            fill
+            priority
             className="w-full h-auto rounded-lg shadow-lg"
           />
         </div>
