@@ -1,42 +1,48 @@
 from PIL import Image, ImageDraw, ImageFont
 
 # Definição dos tamanhos dos ícones
-sizes = [(64, 64), (128, 128), (256, 256), (512, 512), (1000, 1000)]  # Aumentar os tamanhos para maior visibilidade
+sizes = [(64, 64), (128, 128), (256, 256), (512, 512), (1250, 1250)]  # Tamanhos variados
 
-# Criar imagem transparente de 512x512 pixels
-img_size = 1000
+# Criar imagem com fundo transparente
+img_size = 1250
 img = Image.new("RGBA", (img_size, img_size), (0, 0, 0, 0))
 draw = ImageDraw.Draw(img)
 
+# Cor do fundo do círculo
+circle_color = (240, 240, 255, 255)  # Azul claro
+text_color = "#05116c"  # Azul escuro
+
+# Desenhar círculo centralizado
+draw.ellipse((0, 0, img_size, img_size), fill=circle_color)
+
 # Configurar fonte
-font_size = 690  # Aumentar o tamanho da fonte
+font_size = 690  # Ajustado para caber no círculo
 try:
     font = ImageFont.truetype("arialbd.ttf", font_size)  # Fonte em negrito
 except IOError:
     font = ImageFont.load_default()
 
-# Texto e cor
+# Texto "GX"
 text = "GX"
-dark_blue = "#05116c"
 
-# Obter bounding box do texto para centralização
+# Obter bounding box do texto para centralizar
 text_bbox = draw.textbbox((0, 0), text, font=font)
 text_width = text_bbox[2] - text_bbox[0]
 text_height = text_bbox[3] - text_bbox[1]
 
-# Ajuste manual para compensar a linha de base
-baseline_offset = text_bbox[1]  # Pega o topo do bounding box (que pode ser negativo)
-text_y_correction = (baseline_offset // 2)  # Compensa a linha de base
-
-# Calcular posição central e subir um pouco mais
+# Calcular posição central para o texto
 text_x = (img_size - text_width) // 2
-text_y = (img_size - text_height) // 2 - text_y_correction - 14  # Subindo um pouco mais
+text_y = (img_size - text_height) // 2
 
-# Desenhar texto na imagem
-draw.text((text_x, text_y), text, font=font, fill=dark_blue)
+# Ajuste para subir o texto
+text_y -= 80  # Subir o texto mais ainda (aumente ou diminua conforme necessário)
+
+# Desenhar texto sobre o círculo
+draw.text((text_x, text_y), text, font=font, fill=text_color)
 
 # Salvar como .ico
 ico_path = "favicon.ico"
 img.save(ico_path, format="ICO", sizes=sizes)
 
 print(f"Ícone salvo como {ico_path}")
+

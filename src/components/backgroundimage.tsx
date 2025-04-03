@@ -60,6 +60,8 @@ const BackgroundImage: React.FC<BackgroundImageProps> = ({ className }) => {
       src={imageUrls[currentImageIndex]}
       alt="Background"
       className={className}
+      width={1920} 
+      height={1080}
     />
   );
 };
