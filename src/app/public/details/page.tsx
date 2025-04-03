@@ -17,31 +17,50 @@ interface Product {
 const ProductDetails = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [product, setProduct] = useState<Product>();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Garantir que o hook useRouter só seja chamado no cliente
   useEffect(() => {
-    if (!id) return;
+    if (!id) return;  // Não faz nada até que o id esteja disponível
 
     const fetchProduct = async () => {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('id', id)
-        .single();
+      try {
+        setLoading(true);
+        setError(null); // Resetar o erro antes de tentar novamente
 
-      if (error) {
-        console.error('Error fetching product:', error);
-      } else {
-        setProduct(data);
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (error) {
+          setError('Error fetching product');
+        } else {
+          setProduct(data);
+        }
+      } catch (err) {
+        setError('An unexpected error occurred.');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProduct();
   }, [id]);
 
-  if (!product) {
+  if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!product) {
+    return <div>Product not found.</div>;
   }
 
   return (
