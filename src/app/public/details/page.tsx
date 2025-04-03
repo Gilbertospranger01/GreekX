@@ -1,6 +1,5 @@
-"use client";
-import Header from "../../../components/header";
 import Image from "next/image";
+import Header from "../../../components/header";
 
 type Product = {
   id: string;

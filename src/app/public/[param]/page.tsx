@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import supabase from "../../../utils/supabase";
@@ -15,7 +14,7 @@ type Product = {
 
 export default function ProductHandler() {
   const params = useParams();
-  const param = params?.param as string; // Parametrização da URL
+  const param = params?.param as string; 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
