@@ -19,7 +19,6 @@ interface Product {
   image: string;
 }
 
-
 const ProductDetails = ({ params }: ProductDetailsProps) => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -57,5 +56,16 @@ const ProductDetails = ({ params }: ProductDetailsProps) => {
     </div>
   );
 };
+
+// Next.js Server-Side Props to fetch the params properly
+export async function getServerSideProps(context: any) {
+  const { id } = context.params;
+
+  return {
+    props: {
+      params: { id }
+    }
+  };
+}
 
 export default ProductDetails;
