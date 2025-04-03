@@ -10,10 +10,16 @@ type Product = {
   price: number;
 };
 
-export default function ProductList({ products, onSelect }: { products: Product[]; onSelect: (id: string) => void }) {
+export default function ProductList({
+  products,
+  onSelect,
+}: {
+  products: Product[];
+  onSelect: (id: string) => void;
+}) {
   return (
     <div className="bg-gray-900 mt-18">
-      <Header/>
+      <Header />
       <div>
         {products.map((product) => (
           <div
@@ -42,4 +48,3 @@ export default function ProductList({ products, onSelect }: { products: Product[
     </div>
   );
 }
-

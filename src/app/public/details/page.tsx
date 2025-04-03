@@ -1,8 +1,4 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import supabase from "../../../utils/supabase";
 import Header from "../../../components/header";
 import Image from "next/image";
 
@@ -14,36 +10,11 @@ type Product = {
   price: number;
 };
 
-export default function ProductDetails() {
-  const [product, setProduct] = useState<Product | null>(null);
-  const searchParams = useSearchParams();
-  const productId = searchParams.get("id");
+interface ProductDetailsProps {
+  product: Product;
+}
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      if (!productId) return;
-
-      const { data, error } = await supabase.from("products").select("*").eq("id", productId).single();
-      
-      if (error) {
-        console.error("Erro ao buscar produto:", error.message);
-        return;
-      }
-      
-      setProduct(data);
-    };
-
-    fetchProduct();
-  }, [productId]);
-
-  if (!product) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <p className="text-white text-2xl animate-pulse">Carregando produto...</p>
-      </div>
-    );
-  }
-
+export default function ProductDetails({ product }: ProductDetailsProps) {
   return (
     <div className="bg-gray-900 mt-18 h-dvh">
       <Header />

@@ -15,7 +15,7 @@ type Product = {
 
 export default function ProductHandler() {
   const params = useParams();
-  const param = params?.param as string;
+  const param = params?.param as string; // Parametrização da URL
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
