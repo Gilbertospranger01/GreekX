@@ -1,50 +1,59 @@
-"use client";
-import Image from "next/image";
-import Header from "../../../components/header";
+import { useState } from "react";
+import Link from "next/link";
+import supabase from "@/utils/supabase";
 
-type Product = {
-  id: string;
-  image: string;
-  name: string;
-  description: string;
-  price: number;
-};
+const ProductList = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [products, setProducts] = useState<any[]>([]);
 
-export default function ProductList({
-  products,
-  onSelect,
-}: {
-  products: Product[];
-  onSelect: (id: string) => void;
-}) {
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+
+    if (e.target.value.length >= 3) {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .ilike("name", `%${e.target.value}%`);
+
+      if (error) {
+        console.error(error);
+      } else {
+        setProducts(data || []);
+      }
+    } else {
+      setProducts([]);
+    }
+  };
+
   return (
-    <div className="bg-gray-900 mt-18">
-      <Header />
-      <div>
-        {products.map((product) => (
-          <div
-            key={product.id}
-            onClick={() => onSelect(product.id)}
-            className="p-6 border-b border-gray-700 hover:bg-gray-700 cursor-pointer flex gap-6"
-          >
-            <Image
-              src={product.image || "/placeholder.jpg"}
-              width={200}
-              height={200}
-              priority
-              alt={product.name}
-              className="rounded-lg object-cover"
-            />
-            <div className="block">
-              <h2 className="text-xl text-white">{product.name}</h2>
-              <p className="text-gray-400">{product.description}</p>
-              <p className="text-yellow-400">
-                {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(product.price)}
-              </p>
-            </div>
-          </div>
-        ))}
+    <div className="flex flex-col items-center justify-center px-4">
+      <input
+        type="text"
+        placeholder="Search for products..."
+        value={searchTerm}
+        onChange={handleSearch}
+        className="p-2 w-full max-w-md mb-4 rounded"
+      />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {products.length > 0 ? (
+          products.map((product) => (
+            <Link
+              key={product.id}
+              href={`/public/details/${product.id}`}
+              className="block border p-4 rounded shadow-lg"
+            >
+              <img src={product.image} alt={product.name} className="w-full h-64 object-cover mb-4" />
+              <h3 className="text-lg font-semibold">{product.name}</h3>
+              <p>{product.description}</p>
+              <p className="text-xl font-bold">${product.price}</p>
+            </Link>
+          ))
+        ) : (
+          <p>No products found</p>
+        )}
       </div>
     </div>
   );
-}
+};
+
+export default ProductList;
