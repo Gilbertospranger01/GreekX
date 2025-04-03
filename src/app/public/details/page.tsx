@@ -13,7 +13,7 @@ interface Product {
   image: string;
 }
 
-const ProductDetails = ({ params }: { params: { id: string } }) => {
+const ProductDetails = ({ params }) => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
