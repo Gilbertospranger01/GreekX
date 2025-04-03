@@ -5,9 +5,18 @@ import Link from "next/link";
 import supabase from "@/utils/supabase";
 import Image from "next/image";
 
+interface Product {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    image: string;
+    length: string;
+}
+
 const ProductList = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [products, setProducts] = useState<any[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);  // Initialize as an empty array
 
     const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
@@ -21,10 +30,10 @@ const ProductList = () => {
             if (error) {
                 console.error(error);
             } else {
-                setProducts(data || []);
+                setProducts(data || []);  // Make sure to set an empty array in case of no data
             }
         } else {
-            setProducts([]);
+            setProducts([]);  // Clear products if the search term is less than 3 characters
         }
     };
 
