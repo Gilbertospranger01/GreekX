@@ -129,7 +129,7 @@ const Home = () => {
                   <h4 className="font-bold text-5xl text-white">{product.name}</h4>
                   <button
                     className="mt-2 bg-green-600 text-white px-4 py-2 cursor-pointer rounded-md shadow-md w-full hover:bg-green-700 transition duration-300"
-                    onClick={() => router.push(`/public/${product.id}`)}>
+                    onClick={() => router.push(`/public/details?id=${product.id}`)}>
                     Buy Now
                   </button>
                 </div>
