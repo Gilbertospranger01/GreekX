@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ const Home = () => {
   const [results, setResults] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
     if (!searchTerm.trim()) return;
     console.log(loading);
     setLoading(true);
@@ -36,16 +36,24 @@ const Home = () => {
     }
 
     setLoading(false);
-  };
+  }, [searchTerm]); // Apenas searchTerm como dependência
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       handleSearch();
-    }, 500); 
-  
+    }, 500);
+
     return () => clearTimeout(delayDebounce);
-  }, [searchTerm, handleSearch]); 
-  
+  }, [searchTerm, handleSearch]);
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      handleSearch();
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm, handleSearch]);
+
   useEffect(() => {
     if (session === null) return; // Se ainda está carregando, não faz nada
     if (!session) router.push("/signin");
@@ -102,7 +110,7 @@ const Home = () => {
   return (
     <div>
       <Sidebar />
-      <Header/>
+      <Header />
       <main className={`bg-gray-900 container mx-auto px-4 py-8 mt-16 max-w-full w-full transition-all`}>
         <section>
           <h3 className="text-2xl font-bold mb-4 text-center md:text-left">Featured Products</h3>

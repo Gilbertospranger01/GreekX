@@ -83,6 +83,7 @@ const Header = () => {
       }
   
       console.log("Produtos carregados:", data); 
+      console.log(products);
       setProducts(data);
     };
   
