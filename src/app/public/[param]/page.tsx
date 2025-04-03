@@ -1,5 +1,3 @@
-// src/app/public/[param]/page.tsx
-
 "use client";
 
 import supabase from "@/utils/supabase";
@@ -9,7 +7,7 @@ import { useEffect, useState } from "react";
 // components/productDetails.tsx
 interface ProductDetailsProps {
   params: {
-    id: string;
+    id: string; // O id será passado diretamente aqui
   };
 }
 
@@ -25,17 +23,16 @@ const ProductDetails = ({ params }: ProductDetailsProps) => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // This will run on the client, but the initial render is still based on the server-side fetch
   useEffect(() => {
     const fetchProduct = async () => {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .eq("id", params.id)
+        .eq("id", params.id) // Passando o id diretamente
         .single();
 
       if (error || !data) {
-        notFound();
+        notFound(); // Se não encontrar, leva para uma página de erro
       } else {
         setProduct(data);
       }
@@ -44,7 +41,7 @@ const ProductDetails = ({ params }: ProductDetailsProps) => {
     };
 
     fetchProduct();
-  }, [params.id]);
+  }, [params.id]); // Depende do id para refazer a busca
 
   if (loading) {
     return <div>Loading...</div>;
