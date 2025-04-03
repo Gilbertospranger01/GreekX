@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Header from "../../../components/header";
 
+// Defina o tipo para o produto
 type Product = {
   id: string;
   image: string;
@@ -11,10 +12,12 @@ type Product = {
   price: number;
 };
 
+// Defina a interface para as props, mas não exporte diretamente como default
 interface ProductDetailsProps {
   product: Product;
 }
 
+// Agora exporte o componente de forma normal
 export default function ProductDetails({ product }: ProductDetailsProps) {
   return (
     <div className="bg-gray-900 mt-18 h-dvh">
