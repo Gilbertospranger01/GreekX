@@ -1,67 +1,74 @@
 "use client";
 
-import { notFound } from "next/navigation";
-import { useEffect, useState } from "react";
-import supabase from "@/utils/supabase";
-import Image from "next/image";  // Import Image from next/image
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import supabase from '@/utils/supabase';
 
 interface Product {
   id: string;
   name: string;
   description: string;
   price: number;
-  image: string;
+  image?: string;
+  category?: string;
+  stock?: string;
 }
 
-const ProductDetails = ({ params }) => {
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
+const ProductDetails = () => {
+  const router = useRouter();
+  const { id } = router.query;
+  const [product, setProduct] = useState<Product>(); 
 
   useEffect(() => {
     const fetchProduct = async () => {
+      if (!id) return;
+
       const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("id", params.id)
+        .from('products')
+        .select('*')
+        .eq('id', id)
         .single();
 
-      if (error || !data) {
-        notFound();
+      if (error) {
+        console.error('Error fetching product:', error);
       } else {
         setProduct(data);
       }
-
-      setLoading(false);
     };
 
     fetchProduct();
-  }, [params.id]);
+  }, [id]);
 
-  if (loading) {
+  if (!product) {
     return <div>Loading...</div>;
   }
 
-  if (!product) {
-    return <div>Product not found</div>;
-  }
-
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative flex flex-col lg:flex-row gap-16">
-      <div className="w-full lg:w-1/2 lg:sticky top-20 h-max">
-        <Image
-          src={product.image}  // Use next/image for the image
-          alt={product.name}
-          width={500}  // Set width for optimization
-          height={500}  // Set height for optimization
-          className="w-full h-64 object-cover mb-4"
-        />
-      </div>
-      <div className="w-full lg:w-1/2 flex flex-col gap-6">
-        <h1 className="text-4xl font-medium text-gray-950">{product.name}</h1>
-        <p className="text-gray-500">{product.description}</p>
-        <div className="h-[2px] bg-gray-100" />
-        <h2 className="font-medium text-2xl">${product.price}</h2>
-        <div className="h-[2px] bg-gray-100" />
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="grid md:grid-cols-2 gap-8">
+        <div className="flex justify-center items-center">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-auto rounded-lg shadow-lg"
+          />
+        </div>
+        <div>
+          <h1 className="text-3xl font-semibold text-gray-800">{product.name}</h1>
+          <p className="mt-4 text-lg text-gray-600">{product.description}</p>
+          <div className="mt-6 flex items-center justify-between">
+            <span className="text-xl font-bold text-gray-800">
+              ${product.price.toFixed(2)}
+            </span>
+            <button className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+              Add to Cart
+            </button>
+          </div>
+          <div className="mt-4 text-sm text-gray-500">
+            <p>Category: {product.category}</p>
+            <p>Stock: {product.stock}</p>
+          </div>
+        </div>
       </div>
     </div>
   );
