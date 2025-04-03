@@ -1,3 +1,5 @@
+// src/app/public/[param]/page.tsx
+
 "use client";
 
 import supabase from "@/utils/supabase";
@@ -23,6 +25,7 @@ const ProductDetails = ({ params }: ProductDetailsProps) => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // This will run on the client, but the initial render is still based on the server-side fetch
   useEffect(() => {
     const fetchProduct = async () => {
       const { data, error } = await supabase
@@ -56,16 +59,5 @@ const ProductDetails = ({ params }: ProductDetailsProps) => {
     </div>
   );
 };
-
-// Next.js Server-Side Props to fetch the params properly
-export async function getServerSideProps(context: any) {
-  const { id } = context.params;
-
-  return {
-    props: {
-      params: { id }
-    }
-  };
-}
 
 export default ProductDetails;
