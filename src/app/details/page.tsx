@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import supabase from "../../../utils/supabase";
+import supabase from "../../utils/supabase";
 
-export default function Details() {
+function Details() {
   const searchParams = useSearchParams();
-  const productId = searchParams.get("id"); // <-- Pega o ID da URL
+  const productId = searchParams.get("id"); 
   const [product, setProduct] = useState<{
     id: string;
     name: string;
@@ -47,3 +47,6 @@ export default function Details() {
     </div>
   );
 }
+
+
+export default Details;

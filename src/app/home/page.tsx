@@ -175,7 +175,7 @@ const Home = () => {
                       if (!loading) {
                         setLoading(true);
                         setTimeout(() => {
-                          router.push(`/public/details?id=${product.id}`);
+                          router.push(`/details?id=${product.id}`);
                         }, 2000);
                       }
                     }}

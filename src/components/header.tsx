@@ -159,7 +159,7 @@ const Header = () => {
                       {results.map((item, index) => (
                         <li key={index} className="p-2 border-b border-gray-700 hover:bg-gray-700">
                           <button
-                            onClick={() => router.push(`/public/${item.id}`)}
+                            onClick={() => router.push(`/details?id=${item.id}`)}
                             className="flex items-center gap-8 w-full text-left px-6 py-4 text-white transition cursor-pointer"
                           >
                             {item.name}

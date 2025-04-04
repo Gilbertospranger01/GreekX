@@ -29,7 +29,7 @@ const InputSearch: React.FC<InputSearchProps> = ({
   const handleSearch = () => {
     onSearch();
     if (value) {
-      router.push(`/public/${value}`);
+      router.push(`/list?value=${value}`);
     }
   };
 
