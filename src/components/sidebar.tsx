@@ -44,7 +44,7 @@ export default function Sidebar() {
                     <button onClick={() => navigate("/public/products")} className="flex items-center gap-8 w-full text-left px-6 py-4 text-white hover:bg-gray-800 transition cursor-pointer">
                         <FaBoxOpen size={25} /> Products
                     </button>
-                    <button onClick={() => navigate("/public/create_products")} className="flex items-center gap-8 w-full text-left px-6 py-4 text-white hover:bg-gray-800 transition cursor-pointer">
+                    <button onClick={() => navigate("/create_products")} className="flex items-center gap-8 w-full text-left px-6 py-4 text-white hover:bg-gray-800 transition cursor-pointer">
                         <FaBox size={25} /> Create Products
                     </button>
                     <button onClick={() => navigate("/#")} className="flex items-center gap-8 w-full text-left px-6 py-4 text-white hover:bg-gray-800 transition cursor-pointer">

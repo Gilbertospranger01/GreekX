@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
+import { Heart } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "next/navigation";
 import supabase from "../../utils/supabase";
@@ -11,12 +12,21 @@ import Header from "../../components/header";
 const Home = () => {
   const { session } = useAuth();
   const router = useRouter();
-  const [products, setProducts] = useState<{ id: string; name: string; price: number; image?: string; stock: number }[]>([]);
+  const [products, setProducts] = useState<{ id: string; name: string; price: number; description: string; image?: string; stock: number }[]>([]);
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
   const [username, setUsername] = useState<string>("Usuário");
   const [searchTerm] = useState("");
   const [results, setResults] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [favorites, setFavorites] = useState<Record<string, boolean>>({});
+
+  const toggleFavorite = (id: string) => {
+    setFavorites((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+    console.log(favorites);
+  };
 
   const handleSearch = useCallback(async () => {
     if (!searchTerm.trim()) return;
@@ -111,26 +121,75 @@ const Home = () => {
     <div>
       <Sidebar />
       <Header />
-      <main className={`bg-gray-900 container mx-auto px-4 py-8 mt-16 max-w-full w-full transition-all`}>
+      <main className={`bg-gray-900 min-h-screen container mx-auto px-4 py-8 mt-16 max-w-full w-full transition-all`}>
         <section>
           <h3 className="text-2xl font-bold mb-4 text-center md:text-left">Featured Products</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="flex space-x-4 overflow-x-auto">
             {products.map((product) => (
-              <div key={product.id} className="relative w-full h-[400px] bg-gray-800 shadow-md overflow-hidden">
-                <Image
-                  src={product.image || "/placeholder.jpg"}
-                  alt={product.name}
-                  fill
-                  priority
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 flex flex-col justify-end bg-opacity-50 p-4 text-white">
-                  <p className="text-green-600 font-bold text-2xl ">{new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(product.price)}</p>
-                  <h4 className="font-bold text-5xl text-white">{product.name}</h4>
+              <div
+                key={product.id}
+                className="bg-white max-w-[300px] w-full rounded-2xl shadow-lg overflow-hidden"
+              >
+                <div className="relative w-full h-[300px]">
+                  <Image
+                    src={product.image || "/placeholder.jpg"}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                  />
                   <button
-                    className="mt-2 bg-green-600 text-white px-4 py-2 cursor-pointer rounded-md shadow-md w-full hover:bg-green-700 transition duration-300"
-                    onClick={() => router.push(`/public/details?id=${product.id}`)}>
-                    Buy Now
+                    onClick={() => toggleFavorite(product.id)}
+                    className="absolute top-2 right-2 bg-opacity-70 p-1 rounded-full hover:bg-opacity-100 transition cursor-pointer"
+                  >
+                    <Heart
+                      size={24}
+                      className={`transition ${favorites[product.id] ? "fill-red-500 text-red-500" : "text-white"}`}
+                      fill={favorites[product.id] ? "red" : "none"}
+                    />
+                  </button>
+                  <span
+                    className={`absolute top-2 left-2 text-xs px-2 py-1 rounded-full font-medium ${product.stock > 0
+                      ? "bg-green-600 text-white"
+                      : "bg-red-500 text-white"
+                      }`}
+                  >
+                    {product.stock > 0 ? "In Stock" : "Out of Stock"}
+                  </span>
+                </div>
+                <div className="p-4 flex flex-col gap-2 pt-5">
+                  <h4 className="text-lg font-semibold text-gray-800 truncate">
+                    {product.description}
+                  </h4>
+                  <h4 className="text-lg font-semibold text-gray-800 truncate">
+                    {product.name}
+                  </h4>
+                  <p className="text-green-600 text-xl font-bold">
+                    {new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    }).format(product.price)}
+                  </p>
+                  <button
+                    className="mt-auto flex gap-2 items-center justify-center bg-green-600 text-white py-2 rounded-xl w-full hover:bg-green-700 transition duration-300 shadow-md cursor-pointer relative disabled:bg-green-400"
+                    onClick={() => {
+                      if (!loading) {
+                        setLoading(true);
+                        setTimeout(() => {
+                          router.push(`/public/details?id=${product.id}`);
+                        }, 2000);
+                      }
+                    }}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <div className="flex gap-1">
+                        <div className="h-2 w-2 bg-white rounded-full animate-[fadeInOut_1s_infinite]"></div>
+                        <div className="h-2 w-2 bg-white rounded-full animate-[fadeInOut_1s_infinite] [animation-delay:0.2s]"></div>
+                        <div className="h-2 w-2 bg-white rounded-full animate-[fadeInOut_1s_infinite] [animation-delay:0.4s]"></div>
+                      </div>
+                    ) : (
+                      "Buy Now"
+                    )}
                   </button>
                 </div>
               </div>
@@ -138,7 +197,7 @@ const Home = () => {
           </div>
         </section>
       </main>
-      <footer className="w-full bg-gray-800 py-3 bottom-0 left-0">
+      <footer className="fixed left-0 bottom-0 w-full bg-gray-800 py-3">
         <div className="container mx-auto text-center">
           <p>&copy; 2025 GreekX. from Kordy All rights reserved.</p>
         </div>

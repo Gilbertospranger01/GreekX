@@ -141,6 +141,8 @@ const Create_Products = () => {
                                 <Image
                                     src={preview}
                                     alt="Preview"
+                                    width={200}
+                                    height={200}
                                     className="w-full h-full object-cover rounded-md"
                                 />
                             ) : (
