@@ -16,28 +16,14 @@ interface Product {
 function List() {
   const searchParams = useSearchParams();
   const productName = searchParams.get("value");
-
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-
-  const slugify = (text: string) =>
-    text
-      .toLowerCase()
-      .normalize("NFD")                   // remove acentos
-      .replace(/[\u0300-\u036f]/g, "")   // remove acentos
-      .replace(/[^a-z0-9]+/g, "-")       // substitui tudo que não for letra/número por hífen
-      .replace(/^-+|-+$/g, "");          // remove hífens extras do início/fim
-  
-  const handleSearch = () => {
-    if (value.trim()) {
-      onSearch();
-      const slug = slugify(value.trim());
-      router.push(`/list/${slug}`);
-    }
+  const unslugify = (slug: string) => {
+    return slug.replace(/-/g, " ");
   };
-  
+  const searchQuery = productName ? unslugify(productName) : "";
 
   useEffect(() => {
     async function fetchProducts() {
@@ -52,7 +38,7 @@ function List() {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .ilike("name", `%${productName}%`);
+        .ilike("name", `%${searchQuery}%`)
 
       if (error || !data) {
         setError("Erro ao buscar produtos.");

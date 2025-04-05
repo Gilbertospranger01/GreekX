@@ -26,10 +26,22 @@ const InputSearch: React.FC<InputSearchProps> = ({
 }) => {
   const router = useRouter();
 
+  const slugify = (text: string) => {
+    return text
+      .toLowerCase()
+      .normalize("NFD") // remove acentos
+      .replace(/[\u0300-\u036f]/g, "") // remove caracteres especiais
+      .replace(/\s+/g, "-") // espaço vira hífen
+      .replace(/[^\w\-]+/g, "") // remove símbolos
+      .replace(/\-\-+/g, "-") // remove hífens duplicados
+      .replace(/^-+|-+$/g, ""); // remove hífens no começo/fim
+  };
+
   const handleSearch = () => {
     onSearch();
     if (value) {
-      router.push(`/list?value=${value}`);
+      const slug = slugify(value);
+      router.push(`/list?value=${slug}`);
     }
   };
 
@@ -71,3 +83,4 @@ const InputSearch: React.FC<InputSearchProps> = ({
 };
 
 export default InputSearch;
+
