@@ -1,14 +1,13 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import supabase from "../../utils/supabase";
 
 function Details() {
   const searchParams = useSearchParams();
-  const productId = searchParams.get("id"); 
+  const productId = searchParams.get("id");
   const [product, setProduct] = useState<{
     id: string;
     name: string;
@@ -50,5 +49,10 @@ function Details() {
   );
 }
 
-
-export default Details;
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Details />
+    </Suspense>
+  );
+}

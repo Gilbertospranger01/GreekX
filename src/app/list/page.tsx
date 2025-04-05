@@ -1,6 +1,4 @@
 "use client";
-export const dynamic = "force-dynamic";
-
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -19,20 +17,15 @@ function List() {
   const searchParams = useSearchParams();
   const productName = searchParams.get("value");
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const unslugify = (slug: string) => {
-    return slug.replace(/-/g, " ");
-  };
+  const unslugify = (slug: string) => slug.replace(/-/g, " ");
   const searchQuery = productName ? unslugify(productName) : "";
 
   useEffect(() => {
     async function fetchProducts() {
-      if (!productName) {
-        setLoading(false);
-        return;
-      }
+      if (!productName) return;
 
       setLoading(true);
       setError(null);
@@ -40,7 +33,7 @@ function List() {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .ilike("name", `%${searchQuery}%`)
+        .ilike("name", `%${searchQuery}%`);
 
       if (error || !data) {
         setError("Erro ao buscar produtos.");
@@ -54,12 +47,10 @@ function List() {
     }
 
     fetchProducts();
-  }, [productName]);
+  }, [productName, searchQuery]); // Certifique-se de que `searchQuery` está sendo atualizado corretamente
 
   if (loading) return <p>Carregando...</p>;
-
   if (error) return <p className="text-red-500">{error}</p>;
-
   if (products.length === 0) return <p>Produto(s) não encontrado(s).</p>;
 
   return (
